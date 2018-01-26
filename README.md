@@ -3,7 +3,7 @@
 
 ![insert and display list](screenshots/insert.gif?raw=true "insert")
 
-- Insert Uptade and Delete note records from database
+- Insert, Update and Delete note records from database
 
 ![insert and display list](screenshots/update_delete.gif?raw=true "update_delete")
 
