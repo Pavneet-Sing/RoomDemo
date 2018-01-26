@@ -43,6 +43,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:background="@drawable/button_bg"
             android:id="@+id/but_save"
             android:text="Save"
             android:layout_gravity="center"

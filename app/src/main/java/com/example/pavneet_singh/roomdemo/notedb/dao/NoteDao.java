@@ -26,7 +26,7 @@ public interface NoteDao {
     * @param note, object to be inserted
     */
     @Insert
-    void insertNote(Note note);
+    long insertNote(Note note);
 
     /*
     * update the object in database

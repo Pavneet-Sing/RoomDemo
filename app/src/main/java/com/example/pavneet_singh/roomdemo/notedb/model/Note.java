@@ -18,7 +18,7 @@ import java.util.Date;
 public class Note implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
-    private int note_id;
+    private long note_id;
 
     @ColumnInfo(name = "note_content") // column name will be "note_content" instead of "content" in table
     private String content;
@@ -27,19 +27,21 @@ public class Note implements Serializable{
 
     private Date date;
 
-    public Note(int note_id, String content, String title, Date date) {
-        this.note_id = note_id;
-        this.content = content;
-        this.title = title;
-        this.date = date;
-    }
+//    public Note(int note_id, String content, String title, Date date) {
+//        this.note_id = note_id;
+//        this.content = content;
+//        this.title = title;
+//        this.date = date;
+//    }
 
-    @Ignore
     public Note(String content, String title) {
         this.content = content;
         this.title = title;
         this.date = new Date(System.currentTimeMillis());
     }
+
+    @Ignore
+    public Note(){}
 
     public Date getDate() {
         return date;
@@ -49,11 +51,11 @@ public class Note implements Serializable{
         this.date = date;
     }
 
-    public int getNote_id() {
+    public long getNote_id() {
         return note_id;
     }
 
-    public void setNote_id(int note_id) {
+    public void setNote_id(long note_id) {
         this.note_id = note_id;
     }
 
@@ -88,7 +90,7 @@ public class Note implements Serializable{
 
     @Override
     public int hashCode() {
-        int result = note_id;
+        int result = (int)note_id;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         return result;
     }

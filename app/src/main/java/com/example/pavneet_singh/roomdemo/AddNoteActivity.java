@@ -41,14 +41,18 @@ public class AddNoteActivity extends AppCompatActivity {
             et_title.setText(note.getTitle());
             et_content.setText(note.getContent());
         }
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            note.setContent(et_content.getText().toString());
-            note.setTitle(et_title.getText().toString());
-            noteDatabase.getNoteDao().updateNote(note);
-            setResult(note,2);
+                if (update){
+                    note.setContent(et_content.getText().toString());
+                    note.setTitle(et_title.getText().toString());
+                    noteDatabase.getNoteDao().updateNote(note);
+                    setResult(note,2);
+                }else {
+                    note = new Note(et_content.getText().toString(), et_title.getText().toString());
+                    new InsertTask(AddNoteActivity.this,note).execute();
+                }
             }
         });
     }
@@ -72,7 +76,10 @@ public class AddNoteActivity extends AppCompatActivity {
         // doInBackground methods runs on a worker thread
         @Override
         protected Boolean doInBackground(Void... objs) {
-            activityReference.get().noteDatabase.getNoteDao().insertNote(note);
+            // retrieve auto incremented note id
+            long j = activityReference.get().noteDatabase.getNoteDao().insertNote(note);
+            note.setNote_id(j);
+            Log.e("ID ", "doInBackground: "+j );
             return true;
         }
 
@@ -81,6 +88,7 @@ public class AddNoteActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean bool) {
             if (bool){
                 activityReference.get().setResult(note,1);
+                activityReference.get().finish();
             }
         }
     }

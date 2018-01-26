@@ -18,6 +18,7 @@ import com.example.pavneet_singh.roomdemo.notedb.NoteDatabase;
 import com.example.pavneet_singh.roomdemo.notedb.model.Note;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoteListActivity extends AppCompatActivity implements NotesAdapter.OnNoteItemClick{
@@ -63,13 +64,11 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
         @Override
         protected void onPostExecute(List<Note> notes) {
             if (notes!=null && notes.size()>0 ){
-                activityReference.get().notes = notes;
+                activityReference.get().notes.clear();
+                activityReference.get().notes.addAll(notes);
                 // hides empty text view
                 activityReference.get().textViewMsg.setVisibility(View.GONE);
-
-                // create and set the adapter on RecyclerView instance to display list
-                activityReference.get().notesAdapter = new NotesAdapter(notes,activityReference.get());
-                activityReference.get().recyclerView.setAdapter(activityReference.get().notesAdapter);
+                activityReference.get().notesAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -82,6 +81,9 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
         fab.setOnClickListener(listener);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(NoteListActivity.this));
+        notes = new ArrayList<>();
+        notesAdapter = new NotesAdapter(notes,NoteListActivity.this);
+        recyclerView.setAdapter(notesAdapter);
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
@@ -93,15 +95,13 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 ){
+        if (requestCode == 100 && resultCode > 0 ){
             if( resultCode == 1){
                 notes.add((Note) data.getSerializableExtra("note"));
-                if (textViewMsg.getVisibility()== View.VISIBLE)
-                    textViewMsg.setVisibility(View.GONE);
             }else if( resultCode == 2){
                 notes.set(pos,(Note) data.getSerializableExtra("note"));
             }
-            notesAdapter.notifyDataSetChanged();
+            listVisibility();
         }
     }
 
@@ -116,7 +116,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
                         case 0:
                             noteDatabase.getNoteDao().deleteNote(notes.get(pos));
                             notes.remove(pos);
-                            notesAdapter.notifyDataSetChanged();
+                            listVisibility();
                             break;
                         case 1:
                             NoteListActivity.this.pos = pos;
@@ -130,6 +130,16 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
                 }
             }).show();
 
+    }
+
+    private void listVisibility(){
+        int emptyMsgVisibility = View.GONE;
+        if (notes.size() == 0){ // no item to display
+            if (textViewMsg.getVisibility() == View.GONE)
+                emptyMsgVisibility = View.VISIBLE;
+        }
+        textViewMsg.setVisibility(emptyMsgVisibility);
+        notesAdapter.notifyDataSetChanged();
     }
 
     @Override
