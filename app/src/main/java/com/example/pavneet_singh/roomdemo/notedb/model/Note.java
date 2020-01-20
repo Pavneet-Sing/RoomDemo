@@ -15,12 +15,13 @@ import java.util.Date;
  */
 
 @Entity(tableName = Constants.TABLE_NAME_NOTE)
-public class Note implements Serializable{
+public class Note implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private long note_id;
 
-    @ColumnInfo(name = "note_content") // column name will be "note_content" instead of "content" in table
+    @ColumnInfo(name = "note_content")
+    // column name will be "note_content" instead of "content" in table
     private String content;
 
     private String title;
@@ -41,7 +42,8 @@ public class Note implements Serializable{
     }
 
     @Ignore
-    public Note(){}
+    public Note() {
+    }
 
     public Date getDate() {
         return date;
@@ -87,10 +89,9 @@ public class Note implements Serializable{
     }
 
 
-
     @Override
     public int hashCode() {
-        int result = (int)note_id;
+        int result = (int) note_id;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         return result;
     }

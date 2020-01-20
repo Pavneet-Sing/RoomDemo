@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteListActivity extends AppCompatActivity implements NotesAdapter.OnNoteItemClick{
+public class NoteListActivity extends AppCompatActivity implements NotesAdapter.OnNoteItemClick {
 
     private TextView textViewMsg;
     private RecyclerView recyclerView;
@@ -39,12 +39,12 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
         displayList();
     }
 
-    private void displayList(){
+    private void displayList() {
         noteDatabase = NoteDatabase.getInstance(NoteListActivity.this);
         new RetrieveTask(this).execute();
     }
 
-     private static class RetrieveTask extends AsyncTask<Void,Void,List<Note>>{
+    private static class RetrieveTask extends AsyncTask<Void, Void, List<Note>> {
 
         private WeakReference<NoteListActivity> activityReference;
 
@@ -55,7 +55,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
 
         @Override
         protected List<Note> doInBackground(Void... voids) {
-            if (activityReference.get()!=null)
+            if (activityReference.get() != null)
                 return activityReference.get().noteDatabase.getNoteDao().getNotes();
             else
                 return null;
@@ -63,7 +63,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
 
         @Override
         protected void onPostExecute(List<Note> notes) {
-            if (notes!=null && notes.size()>0 ){
+            if (notes != null && notes.size() > 0) {
                 activityReference.get().notes.clear();
                 activityReference.get().notes.addAll(notes);
                 // hides empty text view
@@ -73,33 +73,33 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
         }
     }
 
-    private void initializeVies(){
+    private void initializeVies() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        textViewMsg =  (TextView) findViewById(R.id.tv__empty);
+        textViewMsg = (TextView) findViewById(R.id.tv__empty);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(listener);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(NoteListActivity.this));
         notes = new ArrayList<>();
-        notesAdapter = new NotesAdapter(notes,NoteListActivity.this);
+        notesAdapter = new NotesAdapter(notes, NoteListActivity.this);
         recyclerView.setAdapter(notesAdapter);
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            startActivityForResult(new Intent(NoteListActivity.this,AddNoteActivity.class),100);
+            startActivityForResult(new Intent(NoteListActivity.this, AddNoteActivity.class), 100);
         }
     };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 && resultCode > 0 ){
-            if( resultCode == 1){
+        if (requestCode == 100 && resultCode > 0) {
+            if (resultCode == 1) {
                 notes.add((Note) data.getSerializableExtra("note"));
-            }else if( resultCode == 2){
-                notes.set(pos,(Note) data.getSerializableExtra("note"));
+            } else if (resultCode == 2) {
+                notes.set(pos, (Note) data.getSerializableExtra("note"));
             }
             listVisibility();
         }
@@ -107,34 +107,34 @@ public class NoteListActivity extends AppCompatActivity implements NotesAdapter.
 
     @Override
     public void onNoteClick(final int pos) {
-            new AlertDialog.Builder(NoteListActivity.this)
-            .setTitle("Select Options")
-            .setItems(new String[]{"Delete", "Update"}, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    switch (i){
-                        case 0:
-                            noteDatabase.getNoteDao().deleteNote(notes.get(pos));
-                            notes.remove(pos);
-                            listVisibility();
-                            break;
-                        case 1:
-                            NoteListActivity.this.pos = pos;
-                            startActivityForResult(
-                                    new Intent(NoteListActivity.this,
-                                            AddNoteActivity.class).putExtra("note",notes.get(pos)),
-                                    100);
+        new AlertDialog.Builder(NoteListActivity.this)
+                .setTitle("Select Options")
+                .setItems(new String[]{"Delete", "Update"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+                            case 0:
+                                noteDatabase.getNoteDao().deleteNote(notes.get(pos));
+                                notes.remove(pos);
+                                listVisibility();
+                                break;
+                            case 1:
+                                NoteListActivity.this.pos = pos;
+                                startActivityForResult(
+                                        new Intent(NoteListActivity.this,
+                                                AddNoteActivity.class).putExtra("note", notes.get(pos)),
+                                        100);
 
-                            break;
+                                break;
+                        }
                     }
-                }
-            }).show();
+                }).show();
 
     }
 
-    private void listVisibility(){
+    private void listVisibility() {
         int emptyMsgVisibility = View.GONE;
-        if (notes.size() == 0){ // no item to display
+        if (notes.size() == 0) { // no item to display
             if (textViewMsg.getVisibility() == View.GONE)
                 emptyMsgVisibility = View.VISIBLE;
         }
