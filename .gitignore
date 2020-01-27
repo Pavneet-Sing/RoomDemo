@@ -5,6 +5,7 @@
 .idea/*
 .DS_Store
 /build
+/app/schemas/
 /captures
 .externalNativeBuild
 =======
