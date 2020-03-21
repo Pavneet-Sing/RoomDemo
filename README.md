@@ -7,6 +7,10 @@ To get started with room database implementation follow:
  [Making a Notes App Using Room Database](https://www.pluralsight.com/guides/making-a-notes-app-using-room-database
 ) guide published on [**Pluralsight**](https://www.pluralsight.com) 
 
+
+Note: This project is using [AsyncTask](https://developer.android.com/reference/android/os/AsyncTask) which has been deprecated in Android R(aka Android 11) so follow [room-demo-repo](https://github.com/Pavneet-Sing/room-demo-repo) for udpated codebase.
+
+
 Introduction
 ------------
 Room is a part of android framework to enhance the database integration with the support of android component to follow the best practices for database oriented apps. Room architecture can be defined as 
@@ -24,6 +28,11 @@ RoomDemo demonstrates the [CRUD](https://en.wikipedia.org/wiki/Create,_read,_upd
 ![update and display list](screenshots/update_delete.gif?raw=true "update_delete")
 
 
+**Note:** Follow [room-demo-repo][1] for best practices as `RoomDemo` is using [AsyncTask][0] which has been deprecated in [API level R][2].
+
+[0]: https://developer.android.com/reference/android/os/AsyncTask
+[1]: https://github.com/Pavneet-Sing/room-demo-repo
+[2]: https://android-review.googlesource.com/c/platform/frameworks/base/+/1156409/6/core/java/android/os/AsyncTask.java
 
 LICENSE
 -------
